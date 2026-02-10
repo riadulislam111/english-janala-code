@@ -19,7 +19,11 @@ const displayLevelWord = (words) => {
         // console.log(word);
         const card = document.createElement("div");
         card.innerHTML = `
-        <p>Cat</p>
+        <div class="bg-white rounded-xl shadow-sm text-center py-10 px-5">
+    <h2>Eager</h2>
+    <p>Meaning/Pronounciation</p>
+    <div>"আগ্রহী / ইগার"</div>
+</div>
         `;
         wordContainer.append(card);
     });
