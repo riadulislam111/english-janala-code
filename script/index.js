@@ -10,6 +10,7 @@ const removeActive = () => {
 }
 
 const loadLevelWord = (id) => {
+    manageSpinner(true);
     const url = `https://openapi.programming-hero.com/api/level/${id}`;
     fetch(url)
     .then((res) => res.json())
@@ -23,21 +24,21 @@ const loadLevelWord = (id) => {
 
 };
 
-// {
-//     "word": "Cautious",
-//     "meaning": "সতর্ক",
-//     "pronunciation": "কশাস",
-//     "level": 2,
-//     "sentence": "Be cautious while crossing the road.",
-//     "points": 2,
-//     "partsOfSpeech": "adjective",
-//     "synonyms": [
-//         "careful",
-//         "alert",
-//         "watchful"
-//     ],
-//     "id": 3
-// }
+const createElement = (arr) => {
+    const htmlElements = arr.map((el) => `<span class="btn">${el}</span>`);
+    return (htmlElements.join(" "));
+}
+
+const manageSpinner = (status) => {
+    if(status == true) {
+        document.getElementById("spinner").classList.remove("hidden");
+        document.getElementById("word-container").classList.add("hidden");
+    }
+    else {
+        document.getElementById("word-container").classList.remove("hidden");
+        document.getElementById("spinner").classList.add("hidden");
+    }
+};
 
 const loadWordDetails = async (id) => {
     const url = `https://openapi.programming-hero.com/api/word/${id}`;
@@ -62,10 +63,8 @@ const displayWordDetails = (word) => {
             <p>${word.sentence}</p>
         </div>
         <div class="">
-            <h2 class="font-bold">সমার্থক শব্দ গুলো</h2>
-            <span class="btn">syn1</span>
-            <span class="btn">syn1</span>
-            <span class="btn">syn1</span>
+            <h2 class="font-bold">synonyms</h2>
+             <div class="">${createElement(word.synonyms)}</div>
         </div>
     
     `;
@@ -100,7 +99,8 @@ const displayLevelWord = (words) => {
 </div>
         `;
         wordContainer.append(card);
-    })
+    });
+    manageSpinner(false);
 };
 
 
