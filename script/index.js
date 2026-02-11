@@ -37,12 +37,11 @@ const displayLesson = (lessons) => {
     //2. get into every lessons
     for (let lesson of lessons) {
         //3. create Element
-        console.log(lesson);
+        // console.log(lesson);
         const btnDiv = document.createElement("div");
         btnDiv.innerHTML = `
-        <button onclick="loadLevelWord(${lesson.level_no})" class= "btn btn-outline btn-primary">
-        <i class="fa-solid fa-book-open"></i> ${lesson.level_no}
-        </button>
+        <button class="btn btn-outline btn-primary">
+        <i class="fa-solid fa-book-open"></i> Lesson - ${lesson.level_no}</button>
         `;
         //4. append into container
         levelContainer.append(btnDiv);
