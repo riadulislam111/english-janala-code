@@ -29,6 +29,12 @@ const createElement = (arr) => {
     return (htmlElements.join(" "));
 }
 
+function pronounceWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = "en-EN"; //English
+    window.speechSynthesis.speak(utterance);
+}
+
 const manageSpinner = (status) => {
     if(status == true) {
         document.getElementById("spinner").classList.remove("hidden");
@@ -48,7 +54,7 @@ const loadWordDetails = async (id) => {
 };
 
 const displayWordDetails = (word) => {
-    console.log(word);
+    // console.log(word);
     const detailsBox = document.getElementById("details-container");
     detailsBox.innerHTML = `
     <div class="">
@@ -81,7 +87,9 @@ const displayLevelWord = (words) => {
     <p class="text-xl font-medium text-gray-400">এই Lesson এ এখনো কোন Vocabulary যুক্ত করা হয়নি।</p>
     <h2 class="font-bold text-4xl">নেক্সট Lesson এ যান</h2>
 </div>
-        `
+        `;
+        manageSpinner(false);
+        return;
     }
 
     words.forEach((word) => {
@@ -94,7 +102,7 @@ const displayLevelWord = (words) => {
     <div class="text-2xl front-bangla">${word.meaning ? word.meaning: "Meaning not found"} / ${word.pronunciation ? word.pronunciation: "Pronounciation not found"}</div>
     <div class="flex justify-between items-center">
         <button onclick="loadWordDetails(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
-        <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
+        <button onclick="pronounceWord('${word.word}')" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high"></i></button>
     </div>
 </div>
         `;
@@ -123,3 +131,19 @@ const displayLesson = (lessons) => {
 
 };
 loadLessons();
+
+document.getElementById("btn-search").addEventListener("click", () => {
+    removeActive();
+    const input = document.getElementById("input-search");
+    const searchValue = input.value.trim().toLowerCase();
+    console.log(searchValue);
+
+    fetch("https://openapi.programming-hero.com/api/words/all")
+    .then((res) => res.json())
+    .then((data) => {
+        const allWords = data.data;
+        console.log(allWords);
+        const filterWords = allWords.filter((word) => word.word.toLowerCase().includes(searchValue));
+        displayLevelWord(filterWords);
+    });
+});
